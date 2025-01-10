@@ -1,0 +1,20 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/almalinux-9"
+  config.vm.network "private_network", type: "private_network", virtualbox__intnet: "private_network", virtualbox__intnet__adapter1: "192.168.56.10"
+  
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "2048"
+    vb.cpus = 2
+  end
+  
+  config.vm.define "zabbix-server" do |server|
+    server.vm.hostname = "zabbix-server"
+    
+    # Provisioning skript pro server
+    server.vm.provision "shell", path: "server-setup.sh"
+  end
+  
+  config.vm.define "zabbix-agent" do |agent|
+    agent.vm.hostname = "zabbix-agent"
+  end
+end
